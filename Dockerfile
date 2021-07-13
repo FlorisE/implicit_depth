@@ -43,6 +43,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
          librealsense2-dev \
          librealsense2-dbg
 
+ADD https://api.github.com/repos/FlorisE/implicit_depth/git/refs/heads/main version.json
 RUN git clone https://github.com/FlorisE/implicit_depth && \
     cd implicit_depth && \
     pip3 install -r requirements.txt
