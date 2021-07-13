@@ -10,8 +10,6 @@ import shutil
 import sys
 import time
 
-from api import utils
-
 from attrdict import AttrDict
 
 # from PIL import Image
@@ -30,6 +28,8 @@ import termcolor
 import yaml
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+import utils  # noqa: E402 I100
 
 
 if __name__ == '__main__':
