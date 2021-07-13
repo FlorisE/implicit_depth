@@ -10,4 +10,5 @@ open3d
 OpenEXR
 plyfile
 h5py
+termcolor
 torch-scatter -f https://pytorch-geometric.com/whl/torch-1.6.0+cu102.html
