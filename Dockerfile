@@ -1,4 +1,4 @@
-FROM nvidia/cudagl:10.2-devel-ubuntu18.04 
+FROM nvidia/cudagl:11.0-devel-ubuntu18.04 
 ARG PYTHON_VERSION=3.7
 RUN apt-get update && apt-get install -y --no-install-recommends \
          build-essential \
@@ -36,3 +36,16 @@ RUN  pip install --upgrade pip && \
 
 WORKDIR /workspace
 RUN chmod -R a+w .
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+         software-properties-common
+RUN apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+RUN apt-get update && apt-get install -y --no-install-recommends \
+         librealsense2-dkms \
+         librealsense2-utils \
+         librealsense2-dev \
+         librealsense2-dbg
+
+RUN conda create --name lidf python=3.7
+RUN conda activate lidf
