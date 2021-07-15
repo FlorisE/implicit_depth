@@ -19,7 +19,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
          unzip \
          wget \
          libgtk2.0-dev \
-         python3-pip && \
+         python3-pip \
+         zlib1g-dev \
+         openexr \
+         xorg-dev \
+         libgl1-mesa-dev \
+         libglu1-mesa-dev \
+         libglfw3-dev && \
      rm -rf /var/lib/apt/lists/*
 
 ENV PATH /opt/conda/bin:$PATH
