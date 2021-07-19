@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
          xorg-dev \
          libgl1-mesa-dev \
          libglu1-mesa-dev \
-         libglfw3-dev && \
+         libglfw3-dev \
+         at && \
      rm -rf /var/lib/apt/lists/*
 
 ENV PATH /opt/conda/bin:$PATH
@@ -62,3 +63,9 @@ ADD https://api.github.com/repos/FlorisE/implicit_depth/git/refs/heads/main vers
 RUN git clone https://github.com/FlorisE/implicit_depth && \
     cd implicit_depth && \
     pip3 install -r requirements.txt
+
+RUN cd /workspace/implicit_depth/src/live_demo/realsense && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make

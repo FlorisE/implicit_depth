@@ -122,3 +122,5 @@ log/
 results/
 data/
 # *deprecated/
+
+/src/live_demo/config/config.yaml
