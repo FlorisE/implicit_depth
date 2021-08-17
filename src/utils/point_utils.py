@@ -78,6 +78,7 @@ def batch_get_occupied_idx(v, batch_id,
     
 def sample_valid_points(valid_mask, sample_num, block_x=8, block_y=8):
     bs,h,w = valid_mask.shape
+    print(f"bs: {bs}, h: {h}, w: {w}")
     assert h % block_y == 0
     assert w % block_x == 0
     # reshape valid mask to make sure non zero returns in the block order other than column order.
@@ -92,6 +93,7 @@ def sample_valid_points(valid_mask, sample_num, block_x=8, block_y=8):
     bid_interval = torch.cat((torch.Tensor([0]).long().to(valid_mask.device), bid_interval),0)
     # Now we use for loop over batch dim. can be accelerated by cuda kernal
     tmp_list = []
+    print(f"Considered indexes: {bid_interval.shape[0]-1}")
     for i in range(bid_interval.shape[0]-1):
         sid = bid_interval[i]
         eid = bid_interval[i+1]
@@ -116,7 +118,8 @@ def sample_valid_points(valid_mask, sample_num, block_x=8, block_y=8):
                 raise ValueError('Should be samller')
         
         tmp_list.append(valid_idx[sample_idx])
-    sampled_valid_idx = torch.cat(tmp_list,0)
+    print(f"tmp_list length: {len(tmp_list)}")
+    sampled_valid_idx = torch.cat(tmp_list,0) if len(tmp_list) > 0 else torch.empty((bs * sample_num, 5), dtype=torch.bool)
     sampled_flat_img_id = (sampled_valid_idx[:,1] * block_y + sampled_valid_idx[:,3]) * w \
                         + sampled_valid_idx[:,2] * block_x + sampled_valid_idx[:,4]
     sampled_bid = sampled_valid_idx[:,0]
