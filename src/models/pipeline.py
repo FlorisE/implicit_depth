@@ -128,10 +128,11 @@ class LIDF(nn.Module):
                 data_dict['pred_mask'] = torch.ones_like(data_dict['corrupt_mask'])
                 inp_zero_mask = (batch['depth_corrupt'] == 0).squeeze(1).float()
                 data_dict['valid_mask'] = 1 - inp_zero_mask
-        else:
+
+        if exp_type == 'train' or exp_type == 'test':
             xyz = batch['xyz']
             xyz_flat = xyz.permute(0, 2, 3, 1).contiguous().reshape(bs,-1,3)
-            data_dict['xyz_flat'] = xyz_flat,
+            data_dict['xyz_flat'] = xyz_flat
 
         return data_dict
 
@@ -702,14 +703,14 @@ class LIDF(nn.Module):
             return False, data_dict, loss_dict
         
         # compute gt
-        if exp_type == 'train':
+        if exp_type == 'train' or exp_type == 'test':
             self.compute_gt(data_dict)
         # get embedding
         self.get_embedding(data_dict)
         # get prediction
         self.get_pred(data_dict, exp_type, epoch)
         # compute loss
-        if exp_type == 'train':
+        if exp_type == 'train' or exp_type == 'test':
             loss_dict = self.compute_loss(data_dict, exp_type, epoch)
         return True, data_dict, loss_dict
 
@@ -1040,7 +1041,7 @@ class RefineNet(nn.Module):
                 pred_pos_refine = self.get_pred_refine(data_dict, pred_pos_refine, exp_type, cur_iter)
 
         data_dict['pred_pos_refine'] = pred_pos_refine
-        if exp_type == 'train':
+        if exp_type == 'train' or exp_type == 'test':
             loss_dict_refine = self.compute_loss(data_dict, exp_type, epoch)
             return data_dict, loss_dict_refine
         return data_dict, None
